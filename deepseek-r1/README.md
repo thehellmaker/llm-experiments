@@ -93,20 +93,26 @@ nvcc --version
 ---
 
 ## **4. Setting Up the Ray Cluster**
+### **4.1 Why I Set Up the Ray Cluster Manually?**
+The official vLLM documentation provides a method for setting up distributed inference using **Docker-based deployment** ([Reference](https://docs.vllm.ai/en/latest/serving/distributed_serving.html)). However, in practice, this approach has several stability issues:
+- **Worker Nodes Hang:** The Docker-based setup often causes worker nodes to become unresponsive.
+- **Long Restart Times:** Restarting nodes can take **over 30 minutes**, making debugging and recovery slow.
 
-### **4.1. Install Ray on Head Node**
+This approach was a more reliable and scalable setup for running DeepSeek-R1 efficiently on a multi-node, multi-GPU environment.
+
+### **4.2. Install Ray on Head Node**
 ```bash
 pip install -U "ray[default]" "ray[train]" "ray[tune]" "ray[rllib]" "ray[serve]"
 ray start --head --num-gpus=8
 ```
 
-### **4.2. Install Ray on Worker Nodes**
+### **4.3. Install Ray on Worker Nodes**
 Replace `<head_node_ip>` with the actual head node's IP:
 ```bash
 ray start --address=<head_node_ip>:6379 --num-gpus=8
 ```
 
-### **4.3. Restarting Ray**
+### **4.4. Restarting Ray**
 ```bash
 ray stop
 # Use the appropriate command to restart Ray on head or worker nodes
