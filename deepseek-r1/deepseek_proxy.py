@@ -41,7 +41,7 @@ def lambda_handler(event, context):
             method="POST"
         )
 
-        with urllib.request.urlopen(req, timeout=30) as response:
+        with urllib.request.urlopen(req, timeout=15*60) as response:
             response_data = response.read().decode("utf-8")
             return {
                 "statusCode": response.getcode(),
